@@ -18,65 +18,68 @@ namespace AdventOfCode2018
 
         public override void Test()
         {
-            Utils.Test(Part1, "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9", "17" );
-            //Utils.Test(Part2, "dabAcCaCBAcCcaDA", "4");
+            Utils.Test(Part1, new { data = "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9" }, "17" );
+            Utils.Test(Part2, new { data = "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9", max = 32 }, "16");
         }
 
-     
+        public override dynamic Input => new { data = base.Input, max = 10000 };
+
         public override string Part1(dynamic input)
         {
-            var points = Utils.splitLines((string)input).Select(parseLine).ToList();
+            var points = Utils.splitLines((string)input.data).Select(parseLine).ToList();
             xmax = points.Max(p => p.X);
             ymax = points.Max(p => p.Y);
 
             grid = new int[xmax + 2,ymax + 2];
             counts = new int[points.Count];
 
-            for (int i = 0; i < points.Count; i++)
-            {
-                put(points[i], i + 1);
-            }
-
-            while (Propagate())
-            {
-            }
-
-            Print();
-
-            return (1 + counts.Max()).ToString();
-        }
-
-        private bool Propagate()
-        {
-            int[,] newgrid = (int[,])grid.Clone();
-            bool updated = false;
-
             for (int x = 1; x <= xmax; x++)
             {
                 for (int y = 1; y <= ymax; y++)
                 {
-                    if (grid[x, y] == 0)
+                    var newValue = NearestRoot(x, y, points);
+                    grid[x, y] = newValue; 
+                    if (newValue > 0)
                     {
-                        var newValue = MostCommonNeighbour(x, y);
-                        newgrid[x, y] = newValue;
-                        if (newValue != 0)
+                        counts[newValue - 1]++;
+                        if (x == 1 || y == 1 || x == xmax || y == ymax)
                         {
-                            updated = true;
-                            if (newValue > 0)
-                            {
-                                counts[newValue - 1]++;
-                                if (x == 1 || y == 1 || x == xmax || y == ymax)
-                                {
-                                    counts[newValue - 1] = int.MinValue;
-                                }
-                            }
+                            counts[newValue - 1] = int.MinValue;
                         }
+
                     }
+
                 }
             }
-            
-            grid = newgrid;           
-            return updated;
+
+            //Print();
+
+            return (counts.Max()).ToString();
+        }
+
+        private int NearestRoot(int x, int y, List<Point> points)
+        {
+            int minDistance = int.MaxValue;
+            int closest = 0;
+            bool multipleClosest = false;
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                var p = points[i];
+                var distance = Math.Abs(x - p.X) + Math.Abs(y - p.Y);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closest = i;
+                    multipleClosest = false;
+                }
+                else if (distance == minDistance)
+                {
+                    multipleClosest = true;
+                }
+            }
+
+            return multipleClosest ? -1 : closest + 1;
         }
 
         private void Print()
@@ -139,15 +142,26 @@ namespace AdventOfCode2018
             return -1;
         }
 
-        private void put(Point point, int v)
-        {
-            grid[point.X, point.Y] = v;
-        }
-
         public override string Part2(dynamic input)
         {
-            return null;
-        }        
+            var points = Utils.splitLines((string)input.data).Select(parseLine).ToList();
+            xmax = points.Max(p => p.X);
+            ymax = points.Max(p => p.Y);
+            var threshold = input.max;
+
+            grid = new int[xmax + 2, ymax + 2];
+
+            for (int x = 1; x <= xmax; x++)
+            {
+                for (int y = 1; y <= ymax; y++)
+                {
+                    var distance = points.Sum(p => Math.Abs(p.X - x) + Math.Abs(p.Y - y));
+                    grid[x, y] = distance;                
+                }
+            }
+
+            return grid.flatten().Count(x => x > 0 && x < threshold).ToString();
+        }
 
         private Point parseLine(string line)
         {

@@ -9,6 +9,14 @@ namespace AdventOfCode2018
 {
     static class Utils
     {
+        public static IEnumerable<T> flatten<T>(this T[,] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                yield return array[i % array.GetLength(0), i / array.GetLength(0)];
+            }
+        }
+
         public static IEnumerable<string> splitLines(string input)
         {
             return input.Replace("\r", "").Split('\n').Select(l => l.Trim());
@@ -33,7 +41,7 @@ namespace AdventOfCode2018
                     Write("WRONG: ", ConsoleColor.Red);
                 }
 
-                var input = (string)inputs[i].Replace("\n", " ");
+                var input = inputs[i].ToString().Replace("\n", " ");
                 if (input.Length > 20)
                 {
                     input = input.Substring(0, 20) + "...";

@@ -18,7 +18,7 @@ namespace AdventOfCode2018
             get { return int.Parse(this.GetType().Name.Substring(3)); }
         }
 
-        public string Input => Inputs.ForDay(Index);
+        public virtual dynamic Input => Inputs.ForDay(Index);
 
     }
 }
