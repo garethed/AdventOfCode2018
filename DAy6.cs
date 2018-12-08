@@ -18,15 +18,15 @@ namespace AdventOfCode2018
 
         public override void Test()
         {
-            Utils.Test(Part1, new { data = "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9" }, "17" );
-            Utils.Test(Part2, new { data = "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9", max = 32 }, "16");
+            Utils.Test(Part1, "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9", "17" );
+            Utils.Test(Part2,  "1, 1\n1, 6\n8, 3\n3, 4\n5, 5\n8, 9", "16", new { max = 32 });
         }
 
-        public override dynamic Input => new { data = base.Input, max = 10000 };
+        public override dynamic Options => new { max = 10000 };
 
-        public override string Part1(dynamic input)
+        public override string Part1(string input, dynamic options)
         {
-            var points = Utils.splitLines((string)input.data).Select(parseLine).ToList();
+            var points = Utils.splitLines((string)input).Select(parseLine).ToList();
             xmax = points.Max(p => p.X);
             ymax = points.Max(p => p.Y);
 
@@ -142,12 +142,12 @@ namespace AdventOfCode2018
             return -1;
         }
 
-        public override string Part2(dynamic input)
+        public override string Part2(string input, dynamic options)
         {
-            var points = Utils.splitLines((string)input.data).Select(parseLine).ToList();
+            var points = Utils.splitLines((string)input).Select(parseLine).ToList();
             xmax = points.Max(p => p.X);
             ymax = points.Max(p => p.Y);
-            var threshold = input.max;
+            var threshold = options.max;
 
             grid = new int[xmax + 2, ymax + 2];
 
