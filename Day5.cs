@@ -19,13 +19,13 @@ namespace AdventOfCode2018
         }
 
      
-        public override string Part1(dynamic input)
+        public override string Part1(string input, dynamic options)
         {
             return Collapse(input, '@').ToString(); // any non letter for filter does nothing
                         
         }
 
-        public override string Part2(dynamic input)
+        public override string Part2(string input, dynamic options)
         {
             var min = int.MaxValue;
 

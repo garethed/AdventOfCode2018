@@ -15,7 +15,7 @@ namespace AdventOfCode2018
             Utils.Test(Part2, "abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz", "fgij");
         }
 
-        public override string Part1(dynamic input)
+        public override string Part1(string input, dynamic options)
         {
             int twos = 0, threes = 0;
 
@@ -29,7 +29,7 @@ namespace AdventOfCode2018
             return (twos * threes).ToString();              
         }
 
-        public override string Part2(dynamic input)
+        public override string Part2(string input, dynamic options)
         {
             int i = 0;
 

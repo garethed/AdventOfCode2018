@@ -22,7 +22,7 @@ namespace AdventOfCode2018
         private int ymax;
 
 
-        public override string Part1(dynamic input)
+        public override string Part1(string input, dynamic options)
         {
             PopulateClaims((string)input);
 
@@ -67,7 +67,7 @@ namespace AdventOfCode2018
         }
 
 
-        public override string Part2(dynamic input)
+        public override string Part2(string input, dynamic options)
         {
             PopulateClaims((string)input);
 

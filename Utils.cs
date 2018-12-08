@@ -22,16 +22,16 @@ namespace AdventOfCode2018
             return input.Replace("\r", "").Split('\n').Select(l => l.Trim());
         }
 
-        public static void Test(Func<dynamic, string> method, dynamic input, string output)
+        public static void Test(Func<string, dynamic, string> method, string input, string output, dynamic options = null)
         {
-            Test(method, new dynamic[] { input }, new string[] { output });
+            Test(method, new string[] { input }, new string[] { output }, options);
         }
 
-        public static void Test(Func<dynamic, string> method, dynamic[] inputs, string[] outputs)
+        public static void Test(Func<string, dynamic, string> method, dynamic[] inputs, string[] outputs, dynamic options = null)
         {
             for (int i = 0; i < inputs.Length; i++)
             {
-                var actual = method(inputs[i]);
+                var actual = method(inputs[i], options);
                 if (actual == outputs[i])
                 {
                     Write("OK: ", ConsoleColor.Green);

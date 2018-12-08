@@ -14,7 +14,7 @@ namespace AdventOfCode2018
             Utils.Test(Part2, new[] { "+1\n -1", " +3\n +3\n +4\n -2\n -4", "-6\n +3\n +8\n +5\n -6", "+7\n +7\n -2\n -7\n -4" }, new[] { "0", "10", "5", "14" });
         }
 
-        public override string Part1(dynamic input)
+        public override string Part1(string input, dynamic options)
         {
             int f = 0;
             foreach (string delta in Utils.splitLines(input))
@@ -25,7 +25,7 @@ namespace AdventOfCode2018
             return f.ToString();      
         }
 
-        public override string Part2(dynamic input)
+        public override string Part2(string input, dynamic options)
         {
             HashSet<int> found = new HashSet<int>();
             int f = 0;

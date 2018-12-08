@@ -19,7 +19,7 @@ namespace AdventOfCode2018
         }
 
      
-        public override string Part1(dynamic input)
+        public override string Part1(string input, dynamic options)
         {
             var sleep = ProcessSleepData((string)input);
 
@@ -29,7 +29,7 @@ namespace AdventOfCode2018
             return (sleepiestguard.Key * sleepiesttime).ToString();
         }
 
-        public override string Part2(dynamic input)
+        public override string Part2(string input, dynamic options)
         {
             var sleep = ProcessSleepData((string)input);
 
