@@ -11,7 +11,13 @@ namespace AdventOfCode2018
     {
         public static string ForDay(int day)
         {
-            return File.ReadAllText(@"C:\Work\AdventOfCode2018\Inputs\Day" + day + ".txt");
+            var file = @"C:\Work\AdventOfCode2018\Inputs\Day" + day + ".txt";
+
+            if (File.Exists(file))
+            {
+                return File.ReadAllText(file);
+            }
+            return "";
         }
 
         public static string Day1 =

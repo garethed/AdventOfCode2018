@@ -22,6 +22,11 @@ namespace AdventOfCode2018
             return input.Replace("\r", "").Split('\n').Select(l => l.Trim());
         }
 
+        public static IEnumerable<string> splitLinesWithoutTrim(string input)
+        {
+            return input.Replace("\r", "").Split('\n');
+        }
+
         public static void Test(Func<string, dynamic, string> method, string input, string output, dynamic options = null)
         {
             Test(method, new string[] { input }, new string[] { output }, options);
