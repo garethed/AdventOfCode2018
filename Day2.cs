@@ -9,9 +9,9 @@ namespace AdventOfCode2018
     class Day2 : Day
     {
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, "abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab" , "12" );
+            return Utils.Test(Part1, "abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab" , "12" ) &&
             Utils.Test(Part2, "abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz", "fgij");
         }
 

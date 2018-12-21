@@ -15,9 +15,9 @@ namespace AdventOfCode2018
         int generations = 200;
         int size = 400;
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, testInput, "325");
+            return Utils.Test(Part1, testInput, "325");
         }
 
 

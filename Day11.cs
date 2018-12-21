@@ -12,10 +12,10 @@ namespace AdventOfCode2018
     class Day11 : Day
     {
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, "18", "33,45");
-            Utils.Test(Part2, "18", "90,269,16");
+            return Utils.Test(Part1, "18", "33,45") &&
+            Utils.Test(Part2, "18", "90,269,16") &&
             Utils.Test(Part2, "42", "232,251,12");
             
             //Utils.Test(Part2, "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2", "66");

@@ -12,13 +12,13 @@ namespace AdventOfCode2018
     class Day9 : Day
     {
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, "", "32", new { max = 27, elves = 9 });
-            Utils.Test(Part1, "", "8317", new { max = 1618, elves = 10 });
-            Utils.Test(Part1, "", "146373", new { max = 7999, elves = 13 });
-            Utils.Test(Part1, "", "2764", new { max = 1104, elves = 17 });
-            Utils.Test(Part1, "", "54718", new { max = 6111, elves = 21 });
+            return Utils.Test(Part1, "", "32", new { max = 27, elves = 9 }) &&
+            Utils.Test(Part1, "", "8317", new { max = 1618, elves = 10 }) &&
+            Utils.Test(Part1, "", "146373", new { max = 7999, elves = 13 }) &&
+            Utils.Test(Part1, "", "2764", new { max = 1104, elves = 17 }) &&
+            Utils.Test(Part1, "", "54718", new { max = 6111, elves = 21 }) &&
             Utils.Test(Part1, "", "37305", new { max = 5807, elves = 30 });
 
             //Utils.Test(Part2, "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2", "66");

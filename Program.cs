@@ -20,15 +20,19 @@ namespace AdventOfCode2018
 
                 Checkpoint();
                 Utils.WriteLine("** TESTS **", ConsoleColor.Yellow);
-                day.Test();
+                var test = day.Test();
                 Checkpoint();
-                Utils.WriteLine("** SOLUTIONS **", ConsoleColor.Yellow);
-                Utils.Write("Part 1: ", ConsoleColor.White);
-                Utils.WriteLine(day.Part1(day.Input, day.Options), ConsoleColor.Green);
-                Checkpoint();
-                Utils.Write("Part 2: ", ConsoleColor.White);
-                Utils.WriteLine(day.Part2(day.Input, day.Options), ConsoleColor.Green);
-                Checkpoint();
+
+                if (test)
+                {
+                    Utils.WriteLine("** SOLUTIONS **", ConsoleColor.Yellow);
+                    Utils.Write("Part 1: ", ConsoleColor.White);
+                    Utils.WriteLine(day.Part1(day.Input, day.Options), ConsoleColor.Green);
+                    Checkpoint();
+                    Utils.Write("Part 2: ", ConsoleColor.White);
+                    Utils.WriteLine(day.Part2(day.Input, day.Options), ConsoleColor.Green);
+                    Checkpoint();
+                }
 
             }
             catch (NotImplementedException)

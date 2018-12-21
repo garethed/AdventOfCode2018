@@ -8,7 +8,7 @@ namespace AdventOfCode2018
 {
     abstract class Day
     {
-        public abstract void Test();
+        public abstract bool Test();
         public abstract string Part1(string input, dynamic options);
         public abstract string Part2(string input, dynamic options);
         //public abstract dynamic Input { get; }

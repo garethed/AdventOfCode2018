@@ -27,13 +27,15 @@ namespace AdventOfCode2018
             return input.Replace("\r", "").Split('\n');
         }
 
-        public static void Test(Func<string, dynamic, string> method, string input, string output, dynamic options = null)
+        public static bool Test(Func<string, dynamic, string> method, string input, string output, dynamic options = null)
         {
-            Test(method, new string[] { input }, new string[] { output }, options);
+            return Test(method, new string[] { input }, new string[] { output }, options);
         }
 
-        public static void Test(Func<string, dynamic, string> method, dynamic[] inputs, string[] outputs, dynamic options = null)
+        public static bool Test(Func<string, dynamic, string> method, dynamic[] inputs, string[] outputs, dynamic options = null)
         {
+            var success = true;
+
             for (int i = 0; i < inputs.Length; i++)
             {
                 var actual = method(inputs[i], options);
@@ -44,6 +46,7 @@ namespace AdventOfCode2018
                 else
                 {
                     Write("WRONG: ", ConsoleColor.Red);
+                    success = false;
                 }
 
                 var input = inputs[i].ToString().Replace("\n", " ");
@@ -64,6 +67,8 @@ namespace AdventOfCode2018
                     WriteLine(actual, ConsoleColor.Green);
                 }
             }
+
+            return success;
         }
 
         static MD5 md5 = System.Security.Cryptography.MD5.Create();

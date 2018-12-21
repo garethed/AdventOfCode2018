@@ -13,9 +13,9 @@ namespace AdventOfCode2018
     {
         SortedDictionary<char, Step> steps = new SortedDictionary<char, Step>();
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, testInput, "CABDFE");
+            return Utils.Test(Part1, testInput, "CABDFE") &&
             Utils.Test(Part2, testInput, "15", new { basetime = 0, elves = 2 });
         }
 

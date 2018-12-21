@@ -11,9 +11,9 @@ namespace AdventOfCode2018
     class Day3 : Day
     {
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, "#1 @ 1,3: 4x4\n#2 @ 3,1: 4x4\n#3 @ 5,5: 2x2", "4" );
+            return Utils.Test(Part1, "#1 @ 1,3: 4x4\n#2 @ 3,1: 4x4\n#3 @ 5,5: 2x2", "4" );
         }
 
         private IEnumerable<Claim> claims;

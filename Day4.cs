@@ -12,9 +12,9 @@ namespace AdventOfCode2018
     class Day4 : Day
     {
 
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, TestData, "240" );
+            return Utils.Test(Part1, TestData, "240" ) &&
             Utils.Test(Part2, TestData, "4455");
         }
 

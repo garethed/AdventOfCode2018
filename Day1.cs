@@ -8,9 +8,9 @@ namespace AdventOfCode2018
 {
     class Day1 : Day
     {
-        public override void Test()
+        public override bool Test()
         {
-            Utils.Test(Part1, new[] { "+1\n +1\n +1", "+1\n +1\n -2", "-1\n -2\n -3" }, new[] { "3", "0", "-6" });
+            return Utils.Test(Part1, new[] { "+1\n +1\n +1", "+1\n +1\n -2", "-1\n -2\n -3" }, new[] { "3", "0", "-6" }) &&
             Utils.Test(Part2, new[] { "+1\n -1", " +3\n +3\n +4\n -2\n -4", "-6\n +3\n +8\n +5\n -6", "+7\n +7\n -2\n -7\n -4" }, new[] { "0", "10", "5", "14" });
         }
 
