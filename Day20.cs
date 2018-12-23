@@ -19,41 +19,150 @@ namespace AdventOfCode2018
                 new[] { "3", "10", "18", "4" });
         }
 
-        int r0 = 0;
-        static Room start;
+        HashSet<Point> EW = new HashSet<Point>();
+        HashSet<Point> NS = new HashSet<Point>();
+        Point Start = new Point(0, 0);
+        string Route;
 
         public override string Part1(string input, dynamic options)
         {
-            Room.AllRooms.Clear();
-            start = new Room() { Location = new Point(0, 0) };
-            Room.AllRooms.Add(start.Location, start);
+            EW.Clear();
+            NS.Clear();
+            Route = input;
 
-            traverse(start, input);
+            var path = buildPath(1);
 
-            print(start);
+            traversePath(path, Start, new Stack<Path>());
 
-            var rooms = new Queue<Room>();
-            rooms.Enqueue(start);
-            start.Distance = 0;
+            print();
 
-            int d = 0;
+            var distances = new Dictionary<Point, int>();
+            distances.Add(Start, 0);
+            Queue<Point> points = new Queue<Point>();
+            points.Enqueue(Start);
 
-            while (rooms.Count > 0)
+            var distance = 0;
+            while (points.Any())
             {
-                var next = rooms.Dequeue();
-                d = next.Distance.Value + 1;
-                foreach (var neighbour in next.Neighbours)
+                var point = points.Dequeue();
+                distance = distances[point] + 1;
+                if (NS.Contains(point) )
                 {
-                    if (neighbour != null && neighbour.Distance == null)
+                    var n = new Point(point.X, point.Y + 1);
+                    if (!distances.ContainsKey(n))
                     {
-                        neighbour.Distance = d;
-                        rooms.Enqueue(neighbour);
+                        distances[n] = distance;
+                        points.Enqueue(n);
                     }
+                }
+                var s = new Point(point.X, point.Y - 1);
+                if (NS.Contains(s) && !distances.ContainsKey(s))
+                {
+                    distances[s] = distance;
+                    points.Enqueue(s);
+                }
+                if (EW.Contains(point))
+                {
+                    var e = new Point(point.X + 1, point.Y);
+                    if (!distances.ContainsKey(e))
+                    {
+                        distances[e] = distance;
+                        points.Enqueue(e);
+                    }
+                }
+                var w = new Point(point.X - 1, point.Y);
+                if (EW.Contains(w) && !distances.ContainsKey(w))
+                {
+                    distances[w] = distance;
+                    points.Enqueue(w);
                 }
             }
 
-            return (d - 1).ToString();
+            return (distance - 1).ToString();
+        }
 
+        private void traversePath(Path path, Point location, Stack<Path> subsequentPath)
+        {
+
+            var startPath = Route.Substring(path.start, path.prefixlength);
+            foreach (char c in startPath)
+            {
+                switch (c)
+                {
+                    case 'N':
+                        NS.Add(location);
+                        location = new Point(location.X, location.Y + 1);
+                        break;
+                    case 'S':
+                        location = new Point(location.X, location.Y - 1);
+                        NS.Add(location);
+                        break;
+                    case 'E':
+                        EW.Add(location);
+                        location = new Point(location.X + 1, location.Y);
+                        break;
+                    case 'W':
+                        location = new Point(location.X - 1, location.Y);
+                        EW.Add(location);
+                        break;
+                }
+            }
+
+            if (path.branches.Count > 0)
+            {
+                foreach (var branch in path.branches)
+                {
+                    var subsequent = new Stack<Path>(subsequentPath);
+                    subsequent.Push(path.next);
+                    traversePath(branch, location, subsequent);
+                }
+            }
+            else if (subsequentPath.Any())
+            {
+                var end = subsequentPath.Pop();
+                traversePath(end, location, subsequentPath);
+            }
+        }
+
+        private Path buildPath(int start)
+        {
+            Path path = new Path();
+            var n = Route.IndexOfAny(new char[] { '(', '|', ')', '$' }, start);
+            path.start = start;
+            path.prefixlength = (n - start);
+
+            if (Route[n] != '(')
+            {
+                path.end = n - 1;
+                return path;
+            }
+
+            while (true)
+            {
+                switch (Route[n])
+                {
+                    case '(':
+                    case '|':
+                        var segment = buildPath(n + 1);
+                        n = segment.end + 1;
+                        path.branches.Add(segment);
+                        break;
+                    case ')':
+                        var end = buildPath(n + 1);
+                        path.next = end;
+                        path.end = end.end;
+                        return path;
+                }
+            }
+        }
+
+        class Path
+        {
+            public int start;
+            public int prefixlength;
+            public List<Path> branches = new List<Path>();
+            public Path next;
+            public int end;
         }
 
         private void traverse(Room start, string route)
@@ -108,12 +217,12 @@ namespace AdventOfCode2018
             }
         }    
         
-        static void print(Room start)
+        void print()
         {
-            var xmin = Room.AllRooms.Min(r => r.Key.X);
-            var xmax = Room.AllRooms.Max(r => r.Key.X);
-            var ymin = Room.AllRooms.Min(r => r.Key.Y);
-            var ymax = Room.AllRooms.Max(r => r.Key.Y);
+            var xmin = EW.Min(r => r.X);
+            var xmax = EW.Max(r => r.X) + 1;
+            var ymin = NS.Min(r => r.Y);
+            var ymax = NS.Max(r => r.Y) + 1;
 
             for (int y = ymax; y >= ymin; y--)
             {
@@ -122,16 +231,20 @@ namespace AdventOfCode2018
                 for (int x = xmin; x <= xmax; x++)
                 {
                     var p = new Point(x, y);
-                    if (!Room.AllRooms.ContainsKey(p))
+                    var below = new Point(p.X, p.Y - 1);
+                    var room = EW.Contains(p)
+                        || EW.Contains(new Point(p.X - 1, p.Y))
+                        || NS.Contains(p)
+                        || NS.Contains(below);
+                    if (!room)
                     {
                         Console.Write("  ");
                         nextline.Append("  ");
                     }
                     else
-                    {
-                        var room = Room.AllRooms[p];
-                        Console.Write(room == start ? "*" : "#");
-                        if (room.Neighbours[1] != null)
+                    {                        
+                        Console.Write(p == Start ? "*" : "#");
+                        if (EW.Contains(p))
                         {
                             Console.Write("-");
                         }
@@ -139,16 +252,14 @@ namespace AdventOfCode2018
                         {
                             Console.Write(" ");
                         }
-
-                        if (room.Neighbours[2] != null)
+                        if (NS.Contains(below))
                         {
-                            nextline.Append("|");
+                            nextline.Append("| ");
                         }
                         else
                         {
-                            nextline.Append(" ");
-                        }
-                        nextline.Append(" ");
+                            nextline.Append("  ");
+                        }                        
                     }
                 }
 
