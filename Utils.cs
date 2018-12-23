@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -50,9 +51,9 @@ namespace AdventOfCode2018
                 }
 
                 var input = inputs[i].ToString().Replace("\n", " ");
-                if (input.Length > 20)
+                if (input.Length > 40)
                 {
-                    input = input.Substring(0, 20) + "...";
+                    input = input.Substring(0, 40) + "...";
                 }
 
                 Write(input + " -> ", ConsoleColor.White);
@@ -104,6 +105,13 @@ namespace AdventOfCode2018
         {
             Console.Write(msg);
             Console.CursorLeft = 0;
+        }
+
+        public static void DumpToFile(StringBuilder sb)
+        {
+            string temp = System.IO.Path.GetTempFileName().Replace(".tmp", ".txt");
+            System.IO.File.WriteAllText(temp, sb.ToString());
+            Process.Start(temp);
         }
     }
 }

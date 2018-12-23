@@ -1,0 +1,37 @@
+﻿#ip 4
+addi 4 16 4
+seti 1 8 1
+seti 1 3 5 # set r5 to 1
+mulr 1 5 3 # mult r5 * r1 -> r3
+eqrr 3 2 3 # set 3 to zero iff eq r2 (i.e. if r1 is a factor of r2)
+addr 3 4 4 # add r3 to the ip, will jump to 7 when r3 is r2 -> addi 1 1 4 
+addi 4 1 4 # add 1 to r4, jump to 8
+addr 1 0 0 # !! add r1 to r0 - r1 is a factor of r2
+addi 5 1 5 # add 1 to r5
+gtrr 5 2 3 # if r5 > r2 then r3 = 1
+addr 4 3 4 # add r3 to ip - so jump to 12 iff r5 > r2
+seti 2 2 4 # set ip to 2
+addi 1 1 1 # add 1 to r1
+gtrr 1 2 3 # if r1 > r2 then r3 = 1
+addr 3 4 4 # add r3 to ip
+seti 1 4 4 # set ip to 1
+mulr 4 4 4 # set ip to 16*16
+addi 2 2 2
+mulr 2 2 2
+mulr 4 2 2
+muli 2 11 2
+addi 3 6 3
+mulr 3 4 3
+addi 3 8 3
+addr 2 3 2
+addr 4 0 4 
+seti 0 1 4
+setr 4 4 3
+mulr 3 4 3
+addr 4 3 3
+mulr 4 3 3
+muli 3 14 3
+mulr 3 4 3
+addr 2 3 2
+seti 0 4 0
+seti 0 7 4
