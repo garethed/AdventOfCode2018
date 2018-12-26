@@ -15,8 +15,8 @@ namespace AdventOfCode2018
         public override bool Test()
         {
             return Utils.Test(Part1, 
-                new[] { "^WNE$", "^ENWWW(NEEE|SSE(EE|N))$", "^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$", "^N(N|(N|W))W((N|W))$" }, 
-                new[] { "3", "10", "18", "4" });
+                new[] { "^WNE$", "^ENWWW(NEEE|SSE(EE|N))$", "^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$", "^N(N|(N|W))W(N|W)$", "^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$" }, 
+                new[] { "3", "10", "18", "4", "31" });
         }
 
         HashSet<Point> EW = new HashSet<Point>();
@@ -78,8 +78,12 @@ namespace AdventOfCode2018
                 }
             }
 
+            part2 = distances.Values.Count(k => k >= 1000);
+
             return (distance - 1).ToString();
         }
+
+        int part2 = 0;
 
         private void traversePath(Path path, Point location, Stack<Path> subsequentPath)
         {
@@ -112,11 +116,22 @@ namespace AdventOfCode2018
             {
                 foreach (var branch in path.branches)
                 {
-                    var subsequent = new Stack<Path>(subsequentPath);
-                    subsequent.Push(path.next);
-                    traversePath(branch, location, subsequent);
+                    if (path.branches.Last().prefixlength == 0 && path.branches.Last().branches.Count == 0)
+                    {
+                        traversePath(branch, location, new Stack<Path>());
+                    }
+                    else
+                    {
+                        var subsequent = new Stack<Path>(subsequentPath);
+                        subsequent.Push(path.next);
+                        traversePath(branch, location, subsequent);
+                    }
                 }
             }
+            if (path.next != null)
+            {
+                traversePath(path.next, location, subsequentPath);
+            }            
             else if (subsequentPath.Any())
             {
                 var end = subsequentPath.Pop();
@@ -130,6 +145,7 @@ namespace AdventOfCode2018
             var n = Route.IndexOfAny(new char[] { '(', '|', ')', '$' }, start);
             path.start = start;
             path.prefixlength = (n - start);
+
 
             if (Route[n] != '(')
             {
@@ -321,7 +337,7 @@ namespace AdventOfCode2018
 
         public override string Part2(string input, dynamic options)
         {
-            return null;
+            return part2.ToString();
         }
 
         
