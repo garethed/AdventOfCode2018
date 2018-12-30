@@ -120,7 +120,7 @@ namespace AdventOfCode2018
 
             }
 
-            Utils.DumpToFile(sb);
+            // Utils.DumpToFile(sb);
 
         }
 

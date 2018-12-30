@@ -50,7 +50,7 @@ namespace AdventOfCode2018
                     success = false;
                 }
 
-                var input = inputs[i].ToString().Replace("\n", " ");
+                var input = inputs[i].ToString().Replace("\n", " ").Replace("\r", "");
                 if (input.Length > 40)
                 {
                     input = input.Substring(0, 40) + "...";

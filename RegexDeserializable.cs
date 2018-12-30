@@ -9,7 +9,7 @@ namespace AdventOfCode2018
 {
 
     [System.AttributeUsage(System.AttributeTargets.Class |
-                           System.AttributeTargets.Struct)
+                           System.AttributeTargets.Struct | AttributeTargets.Field)
     ]
     public class RegexDeserializable : System.Attribute
     {
@@ -41,6 +41,21 @@ namespace AdventOfCode2018
                     var converted = Convert.ChangeType(value, fi.FieldType);
                     fi.SetValue(output, converted);
 
+                }
+
+                foreach (var field in typeof(T).GetFields())
+                {
+                    RegexDeserializable[] fieldAttributes = (RegexDeserializable[])field.GetCustomAttributes(typeof(RegexDeserializable), false);
+                    if (fieldAttributes.Any())
+                    {
+                        var fieldRegex = new Regex(fieldAttributes[0].regex, RegexOptions.Singleline | RegexOptions.Multiline);
+
+                        foreach (Match fieldMatch in fieldRegex.Matches(match.Groups[0].Value))
+                        {
+                            var converted = Convert.ChangeType(fieldMatch.Groups[1].Value, field.FieldType);
+                            field.SetValue(output, converted);
+                        }
+                    }
                 }
 
                 results.Add(output);

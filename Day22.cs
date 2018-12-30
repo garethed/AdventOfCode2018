@@ -102,6 +102,96 @@ namespace AdventOfCode2018
 
             buildMap(depth);
 
+
+            int[,,] routecosts = new int[xmax + 3, ymax + 3, 3];
+
+            routecosts[1, 1, 0] = 8;
+            routecosts[1, 1, 1] = 1;
+            routecosts[1, 1, 2] = 8;
+
+            for (int x = 0; x <= xmax; x++)
+            {
+                for (int y = 0; y <= ymax; y++)
+                {
+                    var forbidden = map[x, y];
+                    routecosts[x + 1, y + 1, forbidden] = int.MaxValue;
+                }
+            }
+
+             int currentcost = 1;
+
+            Console.WriteLine();
+
+            try
+            {
+                while (true)
+                {
+                    currentcost++;
+                    Utils.WriteTransient(currentcost.ToString());
+                    var sametoolcost = currentcost - 1;
+                    var changetoolcost = currentcost > 7 ? currentcost - 7 : -1;
+                    for (int x = 0; x <= Math.Min(xmax, currentcost); x++)
+                    {
+                        for (int y = 0; y <= Math.Min(ymax, currentcost); y++)
+                        {
+                            for (int t = 0; t < 3; t++)
+                            {
+                                if (routecosts[x + 1, y + 1, t] == changetoolcost)
+                                {
+                                    setCost(routecosts, x + 1, y + 1, (t + 1) % 3, currentcost);
+                                    setCost(routecosts, x + 1, y + 1, (t + 2) % 3, currentcost);
+                                }
+                                else if (routecosts[x + 1, y + 1, t] == sametoolcost)
+                                {
+                                    setCost(routecosts, x, y + 1, t, currentcost);
+                                    setCost(routecosts, x + 1, y, t, currentcost);
+                                    setCost(routecosts, x + 2, y + 1, t, currentcost);
+                                    setCost(routecosts, x + 1, y + 2, t, currentcost);
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+            catch (CompleteException c)
+            {
+                return c.result;
+            }
+
+
+        }
+
+        private void setCost(int[,,] routecosts, int x, int y, int t, int cost)
+        {
+            if (routecosts[x,y,t] == 0)
+            {
+                routecosts[x, y, t] = cost;
+                //Console.WriteLine((x - 1) + ", " + (y - 1) + " (" + t + ") -> " + (cost - 1));
+                if (x - 1 == tx && y - 1 == ty && t == 1)
+                {
+                    throw new CompleteException() { result = (cost - 1).ToString() };
+                }
+            }
+        }
+
+        public class CompleteException : Exception
+        {
+            public string result;
+        }
+
+        public string Part2x(string input, dynamic options)
+        {
+            int depth = options.depth;
+            tx = int.Parse(input.Substring(0, input.IndexOf(",")));
+            ty = int.Parse(input.Substring(input.IndexOf(",") + 1));
+            xmax = Math.Max(tx, ty) * 4 / 3;
+            ymax = xmax;
+
+            buildMap(depth);
+
             cheapestPath = int.MaxValue;
             Stack<step> path = new Stack<step>();
             HashSet<int> used = new HashSet<int>();
@@ -109,12 +199,12 @@ namespace AdventOfCode2018
             path.Push(new step() { x = 0, y = 0, tool = 1, cost = 0 });
             used.Add(0);
 
-            extendPath(path, used);
+            extendPath(path, used, -1);
 
             return cheapestPath.ToString();
         }
 
-        private void extendPath(Stack<step> path, HashSet<int> used)
+        private void extendPath(Stack<step> path, HashSet<int> used, int prev)
         {
             var current = path.Peek();
 
@@ -162,7 +252,7 @@ namespace AdventOfCode2018
 
             foreach (var step in steps)
             {
-                if (step.x >= 0 && step.x <= xmax && step.y >= 0 && step.y <= ymax /*&& !used.Contains(step.id)*/)
+                if (step.x >= 0 && step.x <= xmax && step.y >= 0 && step.y <= ymax && step.id != prev /*&& !used.Contains(step.id)*/)
                 {
                     if (map[step.x, step.y] == current.tool)
                     {
@@ -194,7 +284,7 @@ namespace AdventOfCode2018
 
             foreach (var step in steps)
             {
-                if (step.cost < int.MaxValue )
+                if (step.cost < int.MaxValue)
                 {
                     if (step.changetool)
                     {
@@ -207,7 +297,7 @@ namespace AdventOfCode2018
 
                                 path.Push(step);
                                 used.Add(step.id);
-                                extendPath(path, used);
+                                extendPath(path, used, current.id);
                                 path.Pop();
                                 used.Remove(step.id);
                             }
@@ -217,7 +307,7 @@ namespace AdventOfCode2018
                     {
                         path.Push(step);
                         used.Add(step.id);
-                        extendPath(path, used);
+                        extendPath(path, used, current.id);
                         path.Pop();
                         used.Remove(step.id);
                     }
